@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>5. state</title>
+    <title>Puzzle 5</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -34,20 +34,23 @@
                 <div id="ui-layer" class="ui-layer hidden-ui">
                     <div id="win-screen">
                         <div class="game-msg">Picture perfect!</div>
-                        <!-- Using shared goToNextLevel -->
-                        <button class="btn-style" id="next-level-btn" onclick="goToNextLevel(_next)">Next puzzle</button>
+                        <button class="btn-style" id="next-level-btn" onclick="goToNextLevel('puzzle-06.html')">Next puzzle</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">5. state</div>
+        <div class="hidden-clue" aria-live="polite">5. ······</div>
     </div>
 
-    <!-- UTILS loaded FIRST -->
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script>
+        Hunt.page(5);
+
         const grid = document.getElementById('puzzle-grid');
         const uiLayer = document.getElementById('ui-layer');
         const COLS = 5; const ROWS = 5;
@@ -110,7 +113,7 @@
         function checkWin() {
             let win = true; for (let i = 0; i < TOTAL_PIECES; i++) { if (boardState[i] !== i) { win = false; break; } }
             if (win) {
-                isSolved = true; playSound('win');
+                isSolved = true; Hunt.complete(); playSound('win');
                 const emptyVisualIndex = boardState.indexOf(TOTAL_PIECES - 1);
                 pieces[emptyVisualIndex].classList.remove('empty-piece');
                 pieces[emptyVisualIndex].style.backgroundImage = `url('${IMAGE_SRC}')`;
@@ -119,9 +122,7 @@
             }
         }
         
-        // Remove local playSound, use shared utils
         
-        const _next = [54, 45, 107, 105, 110, 100, 46, 104, 116, 109, 108];
         
         /* --- SNOW ANIMATION --- */
         const canvas = document.getElementById("snow-canvas");

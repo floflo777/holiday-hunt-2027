@@ -1,0 +1,19 @@
+{
+  "_readme": "Test fixture for tools/test/e2e.py. Placeholder answers and words only.",
+  "iterations": 1000,
+  "puzzles": [
+    {"n": 1,  "word": "alpha",   "answers": [["12"]]},
+    {"n": 2,  "word": "bravo",   "answers": [["rover"]]},
+    {"n": 3,  "word": "charlie", "answers": [["7"]]},
+    {"n": 4,  "word": "delta",   "answers": []},
+    {"n": 5,  "word": "echo",    "answers": []},
+    {"n": 6,  "word": "foxtrot", "split": true,
+     "answers": [["scarf"], ["boots"], ["mittens", "gloves"], ["dog", "puppy"], ["star"], ["tree"]]},
+    {"n": 7,  "word": "golf",    "answers": [["silent night"]]},
+    {"n": 8,  "word": "hotel",   "answers": [["c d e f g a b c high d high e high f high"]]},
+    {"n": 9,  "word": "india",   "answers": []},
+    {"n": 10, "word": "juliett", "answers": [["merry and bright"]]},
+    {"n": 11, "word": "kilo",    "answers": []},
+    {"n": 12, "word": "lima",    "answers": [["you found it"]]}
+  ]
+}

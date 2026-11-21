@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>4. subject</title>
+    <title>Puzzle 4</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -89,19 +89,23 @@
 
                     <div id="win-screen" style="display:none;">
                         <div class="game-msg">Good girl, Willow!</div>
-                        <!-- Use shared goToNextLevel -->
-                        <button id="next-level-btn" onclick="goToNextLevel(_next)" class="btn-style">Next puzzle</button>
+                        <button id="next-level-btn" onclick="goToNextLevel('puzzle-05.html')" class="btn-style">Next puzzle</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">4. subject</div>
+        <div class="hidden-clue" aria-live="polite">4. ······</div>
     </div>
 
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script>
+        Hunt.page(4);
+
         const gameCanvas = document.getElementById('gameCanvas');
         const gCtx = gameCanvas.getContext('2d');
         let animationFrameId;
@@ -366,7 +370,7 @@
 
         function jump() { if (willow.grounded && isPlaying) { willow.dy = willow.jumpPower; willow.grounded = false; playGameSound('jump'); } }
         function gameOver() { isPlaying = false; isGameOver = true; document.getElementById('ui-layer').classList.remove('hidden-ui'); document.getElementById('start-screen').style.display = 'none'; document.getElementById('game-over-screen').style.display = 'flex'; }
-        function gameWin() { isPlaying = false; playGameSound('win'); startFireworksShow(); document.getElementById('ui-layer').classList.remove('hidden-ui'); document.getElementById('start-screen').style.display = 'none'; document.getElementById('win-screen').style.display = 'flex'; requestAnimationFrame(gameLoop); }
+        function gameWin() { isPlaying = false; Hunt.complete(); playGameSound('win'); startFireworksShow(); document.getElementById('ui-layer').classList.remove('hidden-ui'); document.getElementById('start-screen').style.display = 'none'; document.getElementById('win-screen').style.display = 'flex'; requestAnimationFrame(gameLoop); }
         
         const rockets = []; const fireParticles = [];
         function patrioticColor() { const palette = ['#ff0033', '#ffffff', '#0066ff', '#ffcc00']; return palette[Math.floor(Math.random() * palette.length)]; }
@@ -421,7 +425,6 @@
 
         document.getElementById('start-btn').addEventListener('click', resetGame);
         
-        const _next = [53, 45, 115, 116, 97, 116, 101, 46, 104, 116, 109, 108];
 
         const canvas = document.getElementById("snow-canvas"); const ctx = canvas.getContext("2d");
         let width = window.innerWidth; let height = window.innerHeight; canvas.width = width; canvas.height = height;

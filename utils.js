@@ -1,10 +1,6 @@
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
-function _decode(arr) {
-    return String.fromCharCode(...arr);
-}
-
 function playSound(type, param1 = null, param2 = null, param3 = null) {
     if (audioCtx.state === 'suspended') {
         audioCtx.resume().catch(e => console.error("Error resuming AudioContext", e));
@@ -109,31 +105,7 @@ function playSound(type, param1 = null, param2 = null, param3 = null) {
     }
 }
 
-function goToNextLevel(urlArray) {
-    const url = _decode(urlArray);
-    try {
-        if (window.location.protocol === 'blob:') throw new Error("Restricted navigation for blob URL");
-        window.location.href = url;
-    } catch (e) {
-        console.warn("Manual navigation fallback triggered:", e.message);
-        const uiLayer = document.querySelector('#ui-layer.active-ui');
-        if (uiLayer) {
-            let nextButton = uiLayer.querySelector('.btn-style');
-            if (nextButton) {
-                nextButton.innerText = "Click to proceed";
-                nextButton.onclick = () => window.location.href = url;
-                let fallbackLink = document.createElement('a');
-                fallbackLink.href = url;
-                fallbackLink.innerText = "Click here if not redirected";
-                fallbackLink.style.color = "#cfdef3";
-                fallbackLink.style.display = "block";
-                fallbackLink.style.marginTop = "10px";
-                fallbackLink.style.fontSize = "0.9em";
-                fallbackLink.style.opacity = "0.7";
-                nextButton.parentNode.insertBefore(fallbackLink, nextButton.nextSibling);
-            }
-        } else {
-            window.location.href = url;
-        }
-    }
+/** Navigate to the next page. Page names are not secret: the seed words are encrypted (see hunt-core.js). */
+function goToNextLevel(url) {
+    window.location.href = url;
 }

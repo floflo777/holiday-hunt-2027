@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>7. call</title>
+    <title>Puzzle 7</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -38,10 +38,13 @@
 
         <div class="spacer-large"></div>
 
-        <div class="hidden-clue">7. call</div>
+        <div class="hidden-clue" aria-live="polite">7. ······</div>
     </div>
 
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script src="snow.js"></script>
 
     <script>
@@ -65,21 +68,11 @@
         const WORD_SPACE = UNIT * 10;    // Space between words
         const LOOP_DELAY = 3000;        // 3 seconds pause at end
 
-        // Morse Dictionary
-        const morseMap = {
-            74: '.---',
-            73: '..',
-            78: '-.',
-            71: '--.',
-            76: '.-..',
-            69: '.',
-            66: '-...',
-            83: '...',
-            32: ' '
-        };
+        // The message, pre-encoded: letters separated by spaces, words by " / ".
+        // This is the puzzle itself (players must hear it), so it is necessarily
+        // readable from the source — the seed word is what hunt-data.js protects.
+        const MORSE = '.--- .. -. --. .-.. . / -... . .-.. .-.. ...';
 
-        const _m = [74, 73, 78, 71, 76, 69, 32, 66, 69, 76, 76, 83];
-        
         let isAnimating = true;
         let soundEnabled = false;
 
@@ -90,40 +83,25 @@
                 // Initial pause before starting
                 await wait(1000);
 
-                for (let i = 0; i < _m.length; i++) {
-                    const charCode = _m[i];
-                    
-                    if (charCode === 32) {
-                        await wait(WORD_SPACE);
-                        continue;
-                    }
+                const words = MORSE.split(' / ');
+                for (let w = 0; w < words.length; w++) {
+                    if (w > 0) await wait(WORD_SPACE);
+                    for (const code of words[w].split(' ')) {
+                        // Play each symbol in the letter
+                        for (let j = 0; j < code.length; j++) {
+                            const duration = code[j] === '.' ? DOT : DASH;
+                            playTone(duration);
 
-                    const code = morseMap[charCode];
-                    if (!code) continue;
+                            puzzleImage.src = imgOn;
+                            await wait(duration);
+                            puzzleImage.src = imgOff;
 
-                    // Play each symbol in the letter
-                    for (let j = 0; j < code.length; j++) {
-                        const symbol = code[j];
-                        const duration = symbol === '.' ? DOT : DASH;
-                        
-                        // Play Tone (Custom envelope for morse)
-                        playTone(duration);
-
-                        // Visual ON
-                        puzzleImage.src = imgOn;
-                        await wait(duration);
-                        
-                        // Visual OFF
-                        puzzleImage.src = imgOff;
-                        
-                        // Wait between symbols (intra-character), unless it's the last symbol
-                        if (j < code.length - 1) {
-                            await wait(SYMBOL_SPACE);
+                            // Wait between symbols (intra-character), unless it's the last symbol
+                            if (j < code.length - 1) await wait(SYMBOL_SPACE);
                         }
+                        // Wait between letters (inter-character)
+                        await wait(LETTER_SPACE);
                     }
-                    
-                    // Wait between letters (inter-character)
-                    await wait(LETTER_SPACE);
                 }
 
                 // Wait 3 seconds before looping
@@ -178,16 +156,14 @@
 
         // --- PUZZLE VALIDATION ---
         
-        const _k = [106, 105, 110, 103, 108, 101, 32, 98, 101, 108, 108, 115];
+        Hunt.page(7);
 
-        function checkAnswers() {
+        async function checkAnswers() {
             const inputEl = document.getElementById('yeti-msg');
-            const val = inputEl.value.toLowerCase().trim();
-            // _decode is from utils.js
-            const correct = _decode(_k);
-            
-            if (val === correct) {
-                // playSound is from utils.js
+            const result = await Hunt.solve([inputEl.value]);
+            if (result === 'locked') return;
+
+            if (result === 'solved') {
                 playSound('win');
                 uiLayer.classList.remove('hidden-ui');
                 uiLayer.classList.add('active-ui');
@@ -201,10 +177,8 @@
         }
 
         // Next Level Navigation
-        const _next = [56, 45, 114, 111, 97, 115, 116, 46, 104, 116, 109, 108];
         function nextLevel() {
-            // goToNextLevel is from utils.js
-            goToNextLevel(_next);
+            goToNextLevel('puzzle-08.html');
         }
     </script>
 </body>

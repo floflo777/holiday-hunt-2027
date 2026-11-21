@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>8. roast</title>
+    <title>Puzzle 8</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -33,11 +33,14 @@
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">8. roast</div>
+        <div class="hidden-clue" aria-live="polite">8. ······</div>
     </div>
 
     <script src="snow.js"></script>
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script>
         const pianoContainer = document.getElementById('piano-keys');
         
@@ -101,9 +104,8 @@
         }
         
         buildPiano();
+        Hunt.page(8);
 
-        const baseSeq = [ 4,4,4, 4,4,4, 4,7,0,2,4 ];
-        
         function playNote(index, element) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             
@@ -129,39 +131,40 @@
             checkSequence(index);
         }
 
-        let matchIndex = 0; 
-        let detectedOctaveOffset = -1;
-        
-        function checkSequence(noteIndex) {
-            let targetRel = baseSeq[matchIndex];
-            if (matchIndex === 0) {
-                const relative = noteIndex % 12;
-                if (relative === 4) { 
-                    removeHints(); 
-                    matchIndex = 1; 
-                    detectedOctaveOffset = noteIndex - 4; 
-                    return; 
-                }
-            } else {
-                const expected = targetRel + detectedOctaveOffset;
-                if (noteIndex === expected) { 
-                    matchIndex++; 
-                    if (matchIndex >= baseSeq.length) { 
-                        winGame(); 
-                    } 
-                } else {
-                    const relative = noteIndex % 12;
-                    if (relative === 4) { 
-                        matchIndex = 1; 
-                        detectedOctaveOffset = noteIndex - 4; 
-                    } else { 
-                        matchIndex = 0; 
-                        detectedOctaveOffset = -1; 
-                    }
-                }
-            }
+        // --- MELODY CHECK ---
+        // The melody is not stored anywhere: the last MELODY_LENGTH notes played are
+        // turned into a token ("e e g c ...", pitch names relative to the first
+        // note's octave, so any octave works) and handed to Hunt.solve().
+        const MELODY_LENGTH = 11;
+        const NOTE_NAMES = ['c', 'cs', 'd', 'ds', 'e', 'f', 'fs', 'g', 'gs', 'a', 'as', 'b'];
+        const played = [];
+        let checks = Promise.resolve();
+        let solved = false;
+
+        function melodyToken(notes) {
+            const base = 12 * Math.floor(notes[0] / 12);
+            return notes.map(n => {
+                const octave = Math.floor((n - base) / 12);
+                return NOTE_NAMES[(n - base) - 12 * octave] + (octave < 0 ? ' low' : octave > 0 ? ' high' : '');
+            }).join(' ');
         }
-        
+
+        function checkSequence(noteIndex) {
+            if (noteIndex % 12 === 4) removeHints();
+            played.push(noteIndex);
+            if (played.length > MELODY_LENGTH) played.shift();
+            if (played.length < MELODY_LENGTH || solved) return;
+
+            const token = melodyToken(played);
+            checks = checks.then(async () => {
+                if (solved) return;
+                if (await Hunt.solve([token]) === 'solved') {
+                    solved = true;
+                    winGame();
+                }
+            });
+        }
+
         function winGame() { 
             playSound('win');
             const ui = document.getElementById('ui-layer'); 
@@ -169,9 +172,8 @@
             ui.classList.add('active-ui'); 
         }
         
-        const _dest = [57, 45, 99, 97, 110, 99, 101, 108, 46, 104, 116, 109, 108];
         function nextLevel() {
-            goToNextLevel(_dest);
+            goToNextLevel('puzzle-09.html');
         }
     </script>
 </body>

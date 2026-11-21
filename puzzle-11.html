@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>11. case</title>
+    <title>Puzzle 11</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -215,7 +215,7 @@
             <div id="ui-layer" class="ui-layer hidden-ui">
                 <div id="win-screen">
                     <div class="game-msg">The yeti is stoked!</div>
-                    <button class="btn-style" id="next-level-btn" onclick="goToNextLevel(_next)">Next puzzle</button>
+                    <button class="btn-style" id="next-level-btn" onclick="goToNextLevel('puzzle-12.html')">Next puzzle</button>
                 </div>
                 <div id="lose-screen">
                     <div class="game-msg" style="color: #ff6b6b;" id="death-msg">The yeti is famished!</div>
@@ -225,11 +225,14 @@
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">11. case</div>
+        <div class="hidden-clue" aria-live="polite">11. ······</div>
     </div>
 
     <script src="snow.js"></script>
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script>
         const GRID_W = 5;
         const GRID_H = 5;
@@ -416,15 +419,15 @@
         }
 
         function gameWin() {
-            playSound('win'); 
+            Hunt.complete();
+            playSound('win');
             gameActive = false;
             const ui = document.getElementById('ui-layer');
             ui.classList.remove('hidden-ui'); ui.classList.add('active-ui');
             document.getElementById('win-screen').style.display = 'flex';
         }
 
-        const _next = [49, 50, 45, 111, 117, 116, 100, 111, 111, 114, 46, 104, 116, 109, 108]; 
-
+        Hunt.page(11);
         initGame();
     </script>
 </body>

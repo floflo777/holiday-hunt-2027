@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>1. capital</title>
+    <title>Puzzle 1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -24,25 +24,27 @@
 
             <div id="ui-layer" class="ui-layer hidden-ui">
                 <div class="game-msg">It all adds up!</div>
-                <button class="btn-style" onclick="goToNextLevel(_n)">Next puzzle</button>
+                <button class="btn-style" onclick="goToNextLevel('puzzle-02.html')">Next puzzle</button>
             </div>
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">1. capital</div>
+        <div class="hidden-clue" aria-live="polite">1. ······</div>
     </div>
 
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script src="snow.js"></script>
     <script>
-        const _a = [51, 49];
-        const _n = [50, 45, 103, 114, 97, 118, 105, 116, 121, 46, 104, 116, 109, 108];
+        Hunt.page(1);
 
-        function checkAnswer() {
-            const input = document.getElementById('answerInput').value.trim().toLowerCase();
-            const correct = _decode(_a).toLowerCase();
-            
-            if(input === correct) {
+        async function checkAnswer() {
+            const result = await Hunt.solve([document.getElementById('answerInput').value]);
+            if (result === 'locked') return;
+
+            if (result === 'solved') {
                 playSound('win');
                 const ui = document.getElementById('ui-layer');
                 ui.classList.remove('hidden-ui');

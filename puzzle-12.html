@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>12. outdoor</title>
+    <title>Puzzle 12</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -102,29 +102,27 @@
             <div id="ui-layer" class="ui-layer hidden-ui">
                 <div id="win-screen" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
                     <div class="game-msg">Very impressive!</div>
-                    <!-- Use shared goToNextLevel -->
-                    <button id="final-btn" class="btn-style" onclick="goToNextLevel(_t)">Unlock the treasure</button>
+                    <button id="final-btn" class="btn-style" onclick="goToNextLevel('treasure.html')">Unlock the treasure</button>
                 </div>
             </div>
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">12. outdoor</div>
+        <div class="hidden-clue" aria-live="polite">12. ······</div>
     </div>
 
-    <!-- UTILS loaded FIRST -->
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script>
-        const _a = [84, 72, 69, 32, 72, 85, 78, 84, 32, 73, 83, 32, 87, 79, 78];
-        const _t = [104, 111, 108, 105, 100, 97, 121, 45, 104, 117, 110, 116, 45, 116, 114, 101, 97, 115, 117, 114, 101, 46, 104, 116, 109, 108];
+        Hunt.page(12);
 
-        // Use shared _decode and playSound
+        async function checkAnswer() {
+            const result = await Hunt.solve([document.getElementById('answerInput').value]);
+            if (result === 'locked') return;
 
-        function checkAnswer() {
-            const input = document.getElementById('answerInput').value.toUpperCase().trim().replace(/\s+/g, ' ');
-            const correct = _decode(_a);
-            
-            if(input === correct) {
+            if (result === 'solved') {
                 playSound('win'); 
                 const ui = document.getElementById('ui-layer');
                 ui.classList.remove('hidden-ui');

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>10. property</title>
+    <title>Puzzle 10</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -184,15 +184,18 @@
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">10. property</div>
+        <div class="hidden-clue" aria-live="polite">10. ······</div>
     </div>
 
-    <!-- LOAD SHARED SCRIPTS -->
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script src="snow.js"></script>
 
     <script>
         const uiLayer = document.getElementById('ui-layer');
+        Hunt.page(10);
 
         // --- DRAG & DROP LOGIC ---
         function makeDraggable(elmnt) {
@@ -325,21 +328,13 @@
         randomizeInit();
 
 
-        // --- GAME LOGIC ---
-        // Obfuscated Answer: "happy new year"
-        const _a = [104, 97, 112, 112, 121, 32, 110, 101, 119, 32, 121, 101, 97, 114];
-
-        // Obfuscated Next Link: "11-case.html"
-        const _n = [49, 49, 45, 99, 97, 115, 101, 46, 104, 116, 109, 108]; 
-
-        function checkAnswer() {
+        // --- ANSWER CHECK ---
+        async function checkAnswer() {
             const inputEl = document.getElementById('answerInput');
-            const inputVal = inputEl.value.toLowerCase().trim();
-            // _decode is in utils.js
-            const correct = _decode(_a);
+            const result = await Hunt.solve([inputEl.value]);
+            if (result === 'locked') return;
 
-            if(inputVal === correct) {
-                // playSound is in utils.js
+            if (result === 'solved') {
                 playSound('win');
                 uiLayer.classList.remove('hidden-ui');
                 uiLayer.classList.add('active-ui');
@@ -353,8 +348,7 @@
         }
 
         function proceed() {
-            // goToNextLevel is in utils.js
-            goToNextLevel(_n);
+            goToNextLevel('puzzle-11.html');
         }
 
         document.getElementById("answerInput").addEventListener("keyup", function(event) {

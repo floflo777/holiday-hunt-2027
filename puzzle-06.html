@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>6. kind</title>
+    <title>Puzzle 6</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -71,54 +71,40 @@
                 <div id="ui-layer" class="ui-layer hidden-ui">
                     <div id="win-screen">
                         <div class="game-msg">Sharp eyes!</div>
-                        <!-- Using shared goToNextLevel -->
-                        <button class="btn-style" id="next-level-btn" onclick="goToNextLevel(_next)">Next puzzle</button>
+                        <button class="btn-style" id="next-level-btn" onclick="goToNextLevel('puzzle-07.html')">Next puzzle</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">6. kind</div>
+        <div class="hidden-clue" aria-live="polite">6. ······</div>
     </div>
 
-    <!-- UTILS loaded FIRST -->
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script>
         const uiLayer = document.getElementById('ui-layer');
-        const _k1 = [ [109, 117, 115, 116, 97, 99, 104, 101] ];
-        const _k2 = [ [104, 97, 105, 114] ];
-        const _k3 = [ [103, 108, 97, 115, 115, 101, 115], [115, 112, 101, 99, 116, 97, 99, 108, 101, 115] ];
-        const _k4 = [ [99, 97, 116], [107, 105, 116, 116, 101, 110], [102, 101, 108, 105, 110, 101] ];
-        const _k5 = [ [98, 97, 116] ];
-        const _k6 = [ [104, 97, 116], [99, 97, 112], [98, 101, 97, 110, 105, 101] ];
-        const _masterKey = [_k1, _k2, _k3, _k4, _k5, _k6];
-        
-        // Remove local _d and use shared _decode
+        Hunt.page(6);
 
-        function checkAnswers() {
+        async function checkAnswers() {
             const inputElements = document.querySelectorAll('.answer-input');
-            const userInputs = Array.from(inputElements).map(el => el.value.toLowerCase().trim());
-            const allRequirementsMet = _masterKey.every(group => {
-                return userInputs.some(inputVal => {
-                    if(!inputVal) return false;
-                    // Use shared _decode
-                    return group.some(encodedWord => { return inputVal.includes(_decode(encodedWord)); });
-                });
-            });
-            if (allRequirementsMet) {
+            const fields = Array.from(inputElements, el => el.value);
+            // split: one accepted word anywhere in a field is enough ("a big mustache").
+            const result = await Hunt.solve(fields, { split: true });
+            if (result === 'locked') return;
+
+            if (result === 'solved') {
                 playSound('win');
                 uiLayer.classList.remove('hidden-ui');
                 uiLayer.classList.add('active-ui');
             } else {
-                playSound('slide'); 
+                playSound('slide');
                 inputElements.forEach(el => { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); });
             }
         }
-
-        // Removed local playSound, use shared utils
-
-        const _next = [55, 45, 99, 97, 108, 108, 46, 104, 116, 109, 108];
         
         /* --- SNOW ANIMATION --- */
         const canvas = document.getElementById("snow-canvas");

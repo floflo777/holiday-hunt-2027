@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>9. cancel</title>
+    <title>Puzzle 9</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -127,14 +127,19 @@
         </div>
 
         <div class="spacer-large"></div>
-        <div class="hidden-clue">9. cancel</div>
+        <div class="hidden-clue" aria-live="polite">9. ······</div>
     </div>
 
     <!-- SHARED SCRIPTS -->
     <script src="utils.js"></script>
+    <script src="hunt-core.js"></script>
+    <script src="hunt-data.js"></script>
+    <script src="hunt.js"></script>
     <script src="snow.js"></script>
 
     <script>
+        Hunt.page(9);
+
         const GRID_SIZE = 10; const NUM_SHIPS = 3; const SHIP_LENGTH = 4; const MAX_GUESSES = 35;
         let grid = []; let ships = []; let guesses = []; let hits = 0; let guessesLeft = MAX_GUESSES; let gameActive = true;
 
@@ -236,7 +241,8 @@
         function checkWin() {
             const totalTarget = NUM_SHIPS * SHIP_LENGTH;
             if (hits === totalTarget) { 
-                gameActive = false; 
+                gameActive = false;
+                Hunt.complete();
                 showEndScreen(true);
                 if (typeof playSound === 'function') playSound('win'); 
                 return true;
@@ -251,9 +257,6 @@
             }
         }
 
-        // ASCII for 10-property.html
-        const _nextUrl = [49, 48, 45, 112, 114, 111, 112, 101, 114, 116, 121, 46, 104, 116, 109, 108];
-
         function showEndScreen(won) {
             const layer = document.getElementById('ui-layer'); 
             const title = document.getElementById('end-title'); 
@@ -265,14 +268,7 @@
             if (won) { 
                 if(title) title.innerText = "Sweet victory!"; 
                 btn.innerText = "Next Puzzle"; 
-                // Wrap in anonymous function to pass the array to shared utils function
-                btn.onclick = function() { 
-                    if (typeof goToNextLevel === 'function') {
-                        goToNextLevel(_nextUrl);
-                    } else {
-                        window.location.href = String.fromCharCode(..._nextUrl);
-                    }
-                }; 
+                btn.onclick = () => goToNextLevel('puzzle-10.html');
             } else { 
                 if(title) title.innerText = "You're out of guesses"; 
                 btn.innerText = "Try Again"; 

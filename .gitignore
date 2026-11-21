@@ -1,0 +1,3 @@
+# Private hunt configuration: seed words + answers in plaintext. NEVER commit.
+hunt.config.json
+*.secret.json

@@ -458,3 +458,8 @@ input[type="text"]:focus {
 
 @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
 .shake { animation: shake 0.4s; border-color: #ff6b6b !important; }
+
+/* --- HUNT (hunt.js) --- */
+.treasure-sub { font-size: 0.8em; opacity: 0.8; }
+.hunt-locked { display: block; }
+body[aria-busy="true"], body[aria-busy="true"] button { cursor: progress; }

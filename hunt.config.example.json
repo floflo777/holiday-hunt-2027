@@ -1,0 +1,18 @@
+{
+  "_readme": "Copy to hunt.config.json (git-ignored). All values are placeholders.",
+  "iterations": 150000,
+  "puzzles": [
+    {"n": 1, "word": "alpha", "answers": [["new answer one"]]},
+    {"n": 2, "word": "bravo", "answers": [["new answer two", "accepted alternate spelling"]]},
+    {"n": 3, "word": "charlie", "answers": [["new answer three"]]},
+    {"n": 4, "word": "delta", "answers": []},
+    {"n": 5, "word": "echo", "answers": []},
+    {"n": 6, "word": "foxtrot", "split": true, "answers": [["difference one"], ["difference two"], ["difference three", "synonym"], ["difference four"], ["difference five"], ["difference six"]]},
+    {"n": 7, "word": "golf", "answers": [["new answer seven"]]},
+    {"n": 8, "word": "hotel", "answers": [["c d e f g a b c high d high e high f high"]], "_note": "Pitch names relative to the first note's octave (cs = C#, 'low'/'high' outside it). Length = MELODY_LENGTH in puzzle-08.html."},
+    {"n": 9, "word": "india", "answers": []},
+    {"n": 10, "word": "juliett", "answers": [["new answer ten"]]},
+    {"n": 11, "word": "kilo", "answers": []},
+    {"n": 12, "word": "lima", "answers": [["new answer twelve"]]}
+  ]
+}
